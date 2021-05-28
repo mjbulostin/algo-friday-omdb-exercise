@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap'
 import Loader from './Loader/Loader'
-import MovieCard from './MovieCard'
-import NoMoviesFound from './NoMoviesFound'
+import MovieCard from './MovieCard';
+import NoMoviesFound from './NoMoviesFound';
+import API_KEY from '../Secret';
 
 export default function MoviePage() {
   const [search, setSearch] = useState("")
@@ -19,6 +20,7 @@ export default function MoviePage() {
       const parsedData = await response.json();
       setMovies(parsedData.Search);
       setLoading(false)
+
     };
     getDefaultMovies()
   }, [])
@@ -42,8 +44,8 @@ export default function MoviePage() {
       <h1 className="main-header">Moviflix</h1>
       <h3 className="sub-header">User, try searching for any Movie</h3>
       <Form className="search-form"
-        onChange={(e) => {
-          e.preventdefault()
+        onSubmit={(e) => {
+          e.preventDefault()
           getMovies()
         }}>
         <InputGroup className="mb-3">
@@ -51,11 +53,11 @@ export default function MoviePage() {
             placeholder="Search Movies"
             aria-label="Search Movies"
             onChange={(e) => setSearch(e.target.value)}
-            value={setSearch}
+            value={search}
             required
             />
           <InputGroup.Append>
-            <Button type="" variant="secondary">
+            <Button type="submit" variant="secondary">
               Search
               </Button>
           </InputGroup.Append>
@@ -64,7 +66,7 @@ export default function MoviePage() {
       {
         !movies ?
           <NoMoviesFound /> :
-          ( !loading ? 
+          ( loading ? 
             (
               <Loader />
             ) : (
