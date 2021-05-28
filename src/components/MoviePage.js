@@ -3,7 +3,7 @@ import { Button, Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap
 import Loader from './Loader/Loader'
 import MovieCard from './MovieCard';
 import NoMoviesFound from './NoMoviesFound';
-import API_KEY from '../Secret';
+
 
 export default function MoviePage() {
   const [search, setSearch] = useState("")
@@ -14,11 +14,12 @@ export default function MoviePage() {
   useEffect(() => {
     const getDefaultMovies = async () => {
       setLoading(true)
-      const response = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=Dark Knight`, {
+      const response = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=Matrix`, {
         headers: { Accept: "application/json" },
       });
       const parsedData = await response.json();
       setMovies(parsedData.Search);
+      console.log(parsedData);
       setLoading(false)
 
     };
@@ -32,7 +33,7 @@ export default function MoviePage() {
     });
     const parsedData = await response.json();
     if (parsedData) {
-      setMovies(parsedData);
+      setMovies(parsedData.Search);
     } else {
       setMovies([])
     }
@@ -81,7 +82,7 @@ export default function MoviePage() {
                       lg={3}
                       className="mb-4"
                     >
-                      <MovieCard movies={movie} />
+                      <MovieCard movie={movie} />
                     </Col>
                   );
                 })}
